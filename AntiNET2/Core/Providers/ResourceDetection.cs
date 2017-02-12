@@ -8,6 +8,7 @@ using System.Linq;
 using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
+using AntiNET2.Core.Extensions;
 
 namespace AntiNET2.Core.Providers
 {
@@ -44,7 +45,7 @@ namespace AntiNET2.Core.Providers
 
                 if (assoc == null)
                 {
-                    asm.HumanReasons.Add(new Reason("Resources", "Associated type with the resource was not found"));
+                    asm.AddDetection("Resources", new Reason("Resources", "Associated type with the resource was not found"));
                     d++;
                 }
 
@@ -61,7 +62,7 @@ namespace AntiNET2.Core.Providers
 
                 if (reader == null)
                 {
-                    asm.HumanReasons.Add(new Reason("Resources", "Resource is a manifest resource, could contain malicious details."));
+                    asm.AddDetection("Resources", new Reason("Resources", "Resource is a manifest resource, could contain malicious details."));
                     d++;
 
                     if (ebr.GetResourceData().Length > 32)
@@ -96,7 +97,7 @@ namespace AntiNET2.Core.Providers
                             if (bit.Size.Height != bit.Size.Width)
                             {
 
-                                asm.HumanReasons.Add(new Reason("Resources", "Bitmap Resource was not equal dimensions, could be steganography."));
+                                asm.AddDetection("Resources", new Reason("Resources", "Bitmap Resource was not equal dimensions, could be steganography."));
                                 d++;
                             }
 
@@ -116,12 +117,12 @@ namespace AntiNET2.Core.Providers
             int d = 0;
             if (array.Length > 300000)
             {
-                _asm.HumanReasons.Add(new Reason("Resources", "Large resource was found, larger than 300KB"));
+                _asm.AddDetection("Resources", new Reason("Resources", "Large resource was found, larger than 300KB"));
                 d++;
             }
             if (sizeHandler.ContainsKey(array.Length))
             {
-                _asm.HumanReasons.Add(new Reason("Resources", "Another resource has the same data/length."));
+                _asm.AddDetection("Resources", new Reason("Resources", "Another resource has the same data/length."));
                 d++;
             }
             else
@@ -131,30 +132,7 @@ namespace AntiNET2.Core.Providers
 
             if (array.Length > 8)
             {
-                // GZip
-                if (array[0] == 0x1f && array[1] == 0x8b)
-                {
-                    _asm.HumanReasons.Add(new Reason("Resources", "Resource has GZip magic number. Could be malicious packed content."));
-                    d++;
-                }
-                // Pkzip .zip
-                if (array[0] == 0x50 && array[1] == 0x4b && array[2] == 0x03 && array[3] == 0x04)
-                {
-                    _asm.HumanReasons.Add(new Reason("Resources", "Resource has PKZip magic number. Could be malicious packed content."));
-                    d++;
-                }
-                // Rar
-                if (array[0] == 0x52 && array[1] == 0x61 && array[2] == 0x72 && array[3] == 0x21 && array[4] == 0x1A && array[5] == 0x07 && array[6] == 0x00)
-                {
-                    _asm.HumanReasons.Add(new Reason("Resources", "Resource has RAR magic number. Could be malicious packed content."));
-                    d++;
-                }
-                // Exe
-                if (array[0] == 0x4D && array[1] == 0x5A)
-                {
-                    _asm.HumanReasons.Add(new Reason("Resources", "Resource has EXE magic number. Could be malicious content."));
-                    d++;
-                }
+                d += array.SigDetection(_asm, "Resources");
             }
             return d;
         }
@@ -169,7 +147,7 @@ namespace AntiNET2.Core.Providers
 
                 if (readerComp < 5)
                 {
-                    _asm.HumanReasons.Add(new Reason("Resources", "Resource naming was consistent across others. Could mean split resources."));
+                    _asm.AddDetection("Resources", new Reason("Resources", "Resource naming was consistent across others. Could mean split resources."));
                     d++;
                 }
             }

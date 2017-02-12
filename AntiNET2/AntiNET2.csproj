@@ -45,14 +45,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Extensions\ByteArrayExtensions.cs" />
     <Compile Include="Core\Extensions\ModuleExtensions.cs" />
     <Compile Include="Core\Models\AssemblySettings.cs" />
+    <Compile Include="Core\Models\Detection.cs" />
     <Compile Include="Core\Models\IDetectionProcess.cs" />
     <Compile Include="Core\Models\Reason.cs" />
+    <Compile Include="Core\Providers\EOFDetection.cs" />
     <Compile Include="Core\Providers\LevenshteinDistance.cs" />
     <Compile Include="Core\Providers\PInvokeDetection.cs" />
     <Compile Include="Core\Providers\ReflectionDetection.cs" />
     <Compile Include="Core\Providers\ResourceDetection.cs" />
+    <Compile Include="Core\Providers\SectionDetection.cs" />
     <Compile Include="Core\Providers\StringDetection.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
