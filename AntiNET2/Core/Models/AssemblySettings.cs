@@ -10,6 +10,6 @@ namespace AntiNET2.Core.Models
     public class AssemblySettings
     {
         public ModuleDefMD Module;
-        
+        public List<Reason> HumanReasons = new List<Reason>();
     }
 }
