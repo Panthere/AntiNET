@@ -37,6 +37,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -47,6 +48,8 @@
     <Compile Include="Core\Extensions\ModuleExtensions.cs" />
     <Compile Include="Core\Models\AssemblySettings.cs" />
     <Compile Include="Core\Models\IDetectionProcess.cs" />
+    <Compile Include="Core\Models\Reason.cs" />
+    <Compile Include="Core\Providers\LevenshteinDistance.cs" />
     <Compile Include="Core\Providers\PInvokeDetection.cs" />
     <Compile Include="Core\Providers\ReflectionDetection.cs" />
     <Compile Include="Core\Providers\ResourceDetection.cs" />
