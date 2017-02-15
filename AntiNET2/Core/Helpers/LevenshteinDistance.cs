@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AntiNET2.Core.Providers
+namespace AntiNET2.Core.Helpers
 {
     /// <summary>
     /// Contains approximate string matching

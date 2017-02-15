@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AntiNET2.Core.Providers
+namespace AntiNET2.Core.Providers.DetectionEngines.Native
 {
     public class SectionDetection : IDetectionProcess
     {

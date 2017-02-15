@@ -1,5 +1,7 @@
 ﻿using AntiNET2.Core.Models;
 using AntiNET2.Core.Providers;
+using AntiNET2.Core.Providers.DetectionEngines.Managed;
+using AntiNET2.Core.Providers.DetectionEngines.Native;
 using dnlib.DotNet;
 using dnlib.PE;
 using System;

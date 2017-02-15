@@ -9,8 +9,9 @@ using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
 using AntiNET2.Core.Extensions;
+using AntiNET2.Core.Helpers;
 
-namespace AntiNET2.Core.Providers
+namespace AntiNET2.Core.Providers.DetectionEngines.Managed
 {
     public class ResourceDetection : IDetectionProcess
     {

@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AntiNET2.Core.Extensions;
 
-namespace AntiNET2.Core.Providers
+namespace AntiNET2.Core.Providers.DetectionEngines.Native
 {
     public class EOFDetection : IDetectionProcess
     {
