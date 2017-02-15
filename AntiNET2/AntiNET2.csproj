@@ -48,6 +48,7 @@
     <Compile Include="Core\Extensions\ByteArrayExtensions.cs" />
     <Compile Include="Core\Extensions\ModuleExtensions.cs" />
     <Compile Include="Core\Models\AssemblySettings.cs" />
+    <Compile Include="Core\Models\Database\PInvokeEntry.cs" />
     <Compile Include="Core\Models\Database\ReflectionEntry.cs" />
     <Compile Include="Core\Models\Database\StringEntry.cs" />
     <Compile Include="Core\Models\Detection.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="Core\Models\IDetectionProcess.cs" />
     <Compile Include="Core\Models\IDetectionTable.cs" />
     <Compile Include="Core\Models\Reason.cs" />
+    <Compile Include="Core\Providers\Database\PInvokeTable.cs" />
     <Compile Include="Core\Providers\Database\ReflectionTable.cs" />
     <Compile Include="Core\Providers\Database\StringTable.cs" />
     <Compile Include="Core\Providers\Database\DetectionDatabase.cs" />

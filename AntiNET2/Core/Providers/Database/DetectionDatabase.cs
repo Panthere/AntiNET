@@ -15,6 +15,8 @@ namespace AntiNET2.Core.Providers.Database
     {
         public static ReflectionTable Calls { get; private set; }
         public static StringTable Strings { get; private set; }
+        public static PInvokeTable Natives { get; private set; }
+
         private static Dictionary<string, string> Tables = new Dictionary<string, string>();
 
         static DetectionDatabase()
