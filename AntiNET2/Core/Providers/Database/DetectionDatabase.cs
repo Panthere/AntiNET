@@ -16,6 +16,7 @@ namespace AntiNET2.Core.Providers.Database
         public static ReflectionTable Calls { get; private set; }
         public static StringTable Strings { get; private set; }
         public static PInvokeTable Natives { get; private set; }
+        public static SignatureTable Signatures { get; private set; }
 
         private static Dictionary<string, string> Tables = new Dictionary<string, string>();
 
@@ -34,6 +35,12 @@ namespace AntiNET2.Core.Providers.Database
                         break;
                     case "strings":
                         tableInstance = Strings;
+                        break;
+                    case "natives":
+                        tableInstance = Natives;
+                        break;
+                    case "signatures":
+                        tableInstance = Signatures;
                         break;
                     default:
                         continue;
@@ -61,7 +68,15 @@ namespace AntiNET2.Core.Providers.Database
                 }
                 else if (targetTable is StringTable)
                 {
-                    entries = GetEntries<ReflectionEntry>(tableContents).Cast<IDetectionEntry>().ToList();
+                    entries = GetEntries<StringEntry>(tableContents).Cast<IDetectionEntry>().ToList();
+                }
+                else if (targetTable is PInvokeTable)
+                {
+                    entries = GetEntries<PInvokeEntry>(tableContents).Cast<IDetectionEntry>().ToList();
+                }
+                else if (targetTable is SignatureTable)
+                {
+                    entries = GetEntries<SignatureEntry>(tableContents).Cast<IDetectionEntry>().ToList();
                 }
                 if (entries.Count == 0)
                 {

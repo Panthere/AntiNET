@@ -43,5 +43,16 @@ namespace AntiNET2.Core.Extensions
             }
             return d;
         }
+        public static unsafe long IndexOf(this byte[] haystack, byte[] needle, long startOffset = 0)
+        {
+            fixed (byte* h = haystack) fixed (byte* n = needle)
+            {
+                for (byte* hNext = h + startOffset, hEnd = h + haystack.LongLength + 1 - needle.LongLength, nEnd = n + needle.LongLength; hNext < hEnd; hNext++)
+                    for (byte* hInc = hNext, nInc = n; *nInc == *hInc; hInc++)
+                        if (++nInc == nEnd)
+                            return hNext - h;
+                return -1;
+            }
+        }
     }
 }

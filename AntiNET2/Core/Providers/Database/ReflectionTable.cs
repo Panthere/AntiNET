@@ -9,17 +9,10 @@ namespace AntiNET2.Core.Providers.Database
 {
     public class ReflectionTable : IDetectionTable
     {
-
         public List<IDetectionEntry> Rows
         {
-            get
-            {
-                return Rows;
-            }
-            set
-            {
-                Rows = value;
-            }
+            get;
+            set;
         }
     }
 }

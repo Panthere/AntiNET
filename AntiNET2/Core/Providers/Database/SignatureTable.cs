@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AntiNET2.Core.Providers.Database
 {
-    public class StringTable : IDetectionTable
+    public class SignatureTable : IDetectionTable
     {
         public List<IDetectionEntry> Rows
         {
