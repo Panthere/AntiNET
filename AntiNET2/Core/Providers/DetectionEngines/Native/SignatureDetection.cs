@@ -53,7 +53,7 @@ namespace AntiNET2.Core.Providers.DetectionEngines.Native
 
             foreach (SignatureEntry sig in DetectionDatabase.Signatures.Rows)
             {
-                fileSigs.Add(BitConvert
+                //fileSigs.Add(BitConvert
             }
 
             return fileSigs;

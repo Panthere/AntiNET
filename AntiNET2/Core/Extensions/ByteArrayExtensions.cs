@@ -54,5 +54,74 @@ namespace AntiNET2.Core.Extensions
                 return -1;
             }
         }
+        // Credits to github.com/BahNahNah
+        // Slower, sadly
+        public static unsafe long IndexOf(this byte[] search, string sig)
+        {
+            var pattern = sig.ToArray();
+            fixed (byte* scrArrayPtr = &search[0])
+            {
+                var scrEnum = scrArrayPtr;
+                for (var end = (scrArrayPtr + (search.Length - sig.Length + 1)); scrEnum != end; scrEnum++)
+                {
+                    bool found = true;
+                    fixed (char* mPtr = &pattern[0])
+                    {
+                        var mEnum = mPtr;
+                        for (var mEnd = mPtr + pattern.Length; mEnum != mEnd; mEnum++)
+                        {
+                            if (*mEnum == '?')
+                            {
+                                continue;
+                            }
+                            if (*(byte*)mEnum != *scrEnum)
+                            {
+                                found = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (found)
+                        return (int)(scrEnum - scrArrayPtr);
+                    scrEnum++;
+                }
+
+            }
+            return -1;
+        }
+        // Credits to github.com/BahNahNah
+        static unsafe int GetIndexOfScan(byte[] search, byte[] pattern, string match)
+        {
+
+            if (search.Length == 0 || pattern.Length != match.Length || pattern.Length == 0)
+                return 0;
+
+            fixed (byte* scrArrayPtr = &search[0])
+            {
+                var scrEnum = scrArrayPtr;
+                var end = (scrArrayPtr + (search.Length - pattern.Length + 1));
+
+                while (scrEnum != end)
+                {
+                    bool found = true;
+                    for (int pIndex = 0; pIndex < pattern.Length; pIndex++)
+                    {
+
+                        if (match[pIndex] != '?')
+                        {
+                            if (*(scrEnum + pIndex) != pattern[pIndex])
+                            {
+                                found = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (found)
+                        return (int)(scrEnum - scrArrayPtr);
+                    scrEnum++;
+                }
+            }
+            return -1;
+        }
     }
 }
