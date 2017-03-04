@@ -54,10 +54,12 @@ namespace AntiNET2.Core.Providers.Database
             Database.Natives = new List<PInvokeEntry>();
             Database.Strings = new List<StringEntry>();
 
-            Signatures.Add(new SignatureEntry() { Trigger = "0E 1F BA 0E ?? B4 09 CD ?? B8 01 ?? CD 21", Category = "Test", Description = "Test1" });
-            Signatures.Add(new SignatureEntry() { Trigger = "?? 29 D6 F4 3F 14 DE AB F1 84 9B 6A E3 1B ?? 02 ?? 7A AF B6 13 4E E3 83 B9", Category = "Test", Description = "Test2" });
-            Signatures.Add(new SignatureEntry() { Trigger = "4D 5A 90 0? 03", Category = "Test", Description = "Test3" });
-
+            for (int i = 0; i < 5000; i++)
+            {
+                Signatures.Add(new SignatureEntry() { Trigger = "0E 1F BA 0E ?? B4 09 CD ?? B8 01 ?? CD 21", Category = "Test", Description = "Test1" });
+                Signatures.Add(new SignatureEntry() { Trigger = "?? 29 D6 F4 3F 14 DE AB F1 84 9B 6A E3 1B ?? 02 ?? 7A AF B6 13 4E E3 83 B9", Category = "Test", Description = "Test2" });
+                Signatures.Add(new SignatureEntry() { Trigger = "4D 5A 90 0? 03", Category = "Test", Description = "Test3" });
+            }
         }
 
         private static void LoadSignatures()
