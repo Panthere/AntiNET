@@ -1,4 +1,5 @@
-﻿using AntiNET2.Core.Models;
+﻿using AntiNET2.Core.Helpers;
+using AntiNET2.Core.Models;
 using AntiNET2.Core.Models.Database;
 using AntiNET2.Core.Providers.Database;
 using System;
@@ -121,6 +122,12 @@ namespace AntiNET2.Core.Providers.Database
                 detection.Description = parts[1].Split(new char[] { '=' }, 2)[1];
                 detection.Category = parts[2].Split(new char[] { '=' }, 2)[1];
 
+                // Place to assign tags based on detection data
+                if (detection.GetType() == typeof(SignatureEntry))
+                {
+                    detection.Tag = ByteScan.CompileSig(detection.Trigger);
+                }
+                
                 tList.Add(detection);
             }
 

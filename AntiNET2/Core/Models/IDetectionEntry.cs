@@ -11,5 +11,6 @@ namespace AntiNET2.Core.Models
         string Category { get; set; }
         string Description { get; set; }
         string Trigger { get; set; }
+        object Tag { get; set; }
     }
 }
