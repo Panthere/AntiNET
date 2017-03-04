@@ -49,7 +49,7 @@ namespace AntiNET2.Core.Providers.DetectionEngines.Managed
 
             foreach (PInvokeEntry pEntry in DetectionDatabase.Natives)
             {
-                if (md.ImplMap.Name.ToLower().StartsWith(pEntry.Trigger.ToLower()))
+                if (md.ImplMap.Name.StartsWith(pEntry.Trigger, StringComparison.InvariantCultureIgnoreCase))
                 {
                     _asm.AddDetection(pEntry.Category, new Reason(pEntry.Category, pEntry.Description));
                     d++;
