@@ -1,28 +1,29 @@
 ﻿using AntiNET2.Core.Models;
-using AntiNET2.Core.Providers;
 using AntiNET2.Core.Providers.DetectionEngines.Managed;
 using AntiNET2.Core.Providers.DetectionEngines.Native;
 using dnlib.DotNet;
 using dnlib.PE;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace AntiNET2
 {
-    class Program
+    public static class Scanner
     {
-        static void Main(string[] args)
+        public static List<Detection> Scan(string file, out int detectionCount)
         {
+
             AssemblySettings asmSettings = new AssemblySettings();
             bool isNet = true;
             try
             {
-                asmSettings.Module = ModuleDefMD.Load(args[0]);
+                asmSettings.Module = ModuleDefMD.Load(file);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 isNet = false;
             }
@@ -31,7 +32,7 @@ namespace AntiNET2
             {
                 try
                 {
-                    asmSettings.NativeImage = new PEImage(args[0]);
+                    asmSettings.NativeImage = new PEImage(file);
 
                 }
                 catch (Exception ex)
@@ -39,7 +40,8 @@ namespace AntiNET2
                     // Cannot continue execution
                     Console.WriteLine(ex);
                     Console.ReadLine();
-                    return;
+                    detectionCount = 0;
+                    return new List<Detection>();
                 }
             }
             else
@@ -60,18 +62,14 @@ namespace AntiNET2
 
             int totalDetections = 0;
 
+
             dp.ForEach(x => totalDetections += x.Detect(asmSettings));
 
-            Console.WriteLine(totalDetections);
+            
+            detectionCount = totalDetections;
 
-            var grouped = asmSettings.TotalDetections.GroupBy(x => x.DetectionType).ToDictionary(x => x.Key);
-            foreach (var pair in grouped)
-            {
-                foreach (var x in pair.Value)
-                {
-                    x.DetectionReasons.ForEach(y => Console.WriteLine(y));
-                }
-            }
+            return asmSettings.TotalDetections;
+
         }
     }
 }

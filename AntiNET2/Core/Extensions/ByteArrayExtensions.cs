@@ -43,6 +43,14 @@ namespace AntiNET2.Core.Extensions
             }
             return d;
         }
+
+        public static long IndexOf(this byte[] file, string sig)
+        {
+            return ByteScan.GetIndexOfSig(file, sig);
+        }
+
+        #region Testing Index Of
+
         public static unsafe long IndexOf(this byte[] haystack, byte[] needle, long startOffset = 0)
         {
             fixed (byte* h = haystack) fixed (byte* n = needle)
@@ -57,9 +65,7 @@ namespace AntiNET2.Core.Extensions
 
         // string like
         // 4D 5A 9? 00 03 is sig
-
         // Hex is 2 chars, so need to work on that
-
         public static long IndexOfTest(this byte[] search, string sig)
         {
             string[] sigParts = sig.Split(' ');
@@ -109,9 +115,15 @@ namespace AntiNET2.Core.Extensions
 
         // Credits to github.com/BahNahNah
         // Slower, sadly
-        public static unsafe long IndexOf(this byte[] search, string sig)
+        public static unsafe long IndexOfTest2(this byte[] search, string sig)
         {
-            var pattern = sig.ToArray();
+            var pattern = sig.Split(' ').Select(x =>
+            {
+                if (x == "??")
+                    return '?';
+                return (char)Convert.ToByte(x, 16);
+            }).ToArray();
+
             fixed (byte* scrArrayPtr = &search[0])
             {
                 var scrEnum = scrArrayPtr;
@@ -130,6 +142,7 @@ namespace AntiNET2.Core.Extensions
                             string left = (*mEnum).ToString();
                             string right = (*scrEnum).ToString("X");
                             if (left != right)
+                            //if (*(byte*)mEnum != *scrEnum)
                             {
                                 found = false;
                                 break;
@@ -178,5 +191,6 @@ namespace AntiNET2.Core.Extensions
             }
             return -1;
         }
+        #endregion
     }
 }

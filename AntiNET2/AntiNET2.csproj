@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{D3E5408C-57FE-43F9-AA38-B10BD6390D80}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AntiNET2</RootNamespace>
     <AssemblyName>AntiNET2</AssemblyName>
@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="dnlib">
       <HintPath>..\Dependencies\dnlib.dll</HintPath>
@@ -48,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Core\Extensions\ByteArrayExtensions.cs" />
     <Compile Include="Core\Extensions\ModuleExtensions.cs" />
+    <Compile Include="Core\Helpers\ByteScan.cs" />
     <Compile Include="Core\Models\AssemblySettings.cs" />
     <Compile Include="Core\Models\Database\PInvokeEntry.cs" />
     <Compile Include="Core\Models\Database\ReflectionEntry.cs" />
@@ -71,8 +75,8 @@
     <Compile Include="Core\Providers\DetectionEngines\Native\SectionDetection.cs" />
     <Compile Include="Core\Providers\DetectionEngines\Managed\StringDetection.cs" />
     <Compile Include="Core\Providers\DetectionEngines\Native\SignatureDetection.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scanner.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

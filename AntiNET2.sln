@@ -1,7 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AntiNET2", "AntiNET2\AntiNET2.csproj", "{D3E5408C-57FE-43F9-AA38-B10BD6390D80}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AntiNETCLI", "AntiNETCLI\AntiNETCLI.csproj", "{B3ED1DBF-32FA-40AC-ACE2-B57FDD4A1C0C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +17,10 @@ Global
 		{D3E5408C-57FE-43F9-AA38-B10BD6390D80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3E5408C-57FE-43F9-AA38-B10BD6390D80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3E5408C-57FE-43F9-AA38-B10BD6390D80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3ED1DBF-32FA-40AC-ACE2-B57FDD4A1C0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3ED1DBF-32FA-40AC-ACE2-B57FDD4A1C0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3ED1DBF-32FA-40AC-ACE2-B57FDD4A1C0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3ED1DBF-32FA-40AC-ACE2-B57FDD4A1C0C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -22,6 +22,14 @@ namespace AntiNET2.Core.Providers.Database
 
         static DetectionDatabase()
         {
+            Signatures = new SignatureTable();
+
+            Tables.Add("sigs.db", "signatures");
+
+            LoadDatabase();
+        }
+        private static void LoadDatabase()
+        {
             // Load database into table
             string basePath = Environment.CurrentDirectory + "\\";
 
@@ -54,7 +62,6 @@ namespace AntiNET2.Core.Providers.Database
 
             }
         }
-
         private static bool LoadTable(string fileName, IDetectionTable targetTable)
         {
             try
@@ -110,9 +117,9 @@ namespace AntiNET2.Core.Providers.Database
 
 
                 T detection = new T();
-                detection.Trigger = parts[0].Split('=')[1];
-                detection.Description = parts[1].Split('=')[1];
-                detection.Category = parts[2].Split('=')[1];
+                detection.Trigger = parts[0].Split(new char[] { '=' }, 2)[1];
+                detection.Description = parts[1].Split(new char[] { '=' }, 2)[1];
+                detection.Category = parts[2].Split(new char[] { '=' }, 2)[1];
 
                 tList.Add(detection);
             }

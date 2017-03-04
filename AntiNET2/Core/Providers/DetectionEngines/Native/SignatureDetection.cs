@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace AntiNET2.Core.Providers.DetectionEngines.Native
 {
@@ -22,54 +23,31 @@ namespace AntiNET2.Core.Providers.DetectionEngines.Native
             _asm = asm;
             int d = 0;
             
-            // Signatures
-            
-            // Read file into byte array
-            // foreach on signatures, try match sigs, regex enabled/allowed
-
             //asm.NativeImage.UnsafeDisableMemoryMappedIO();
-
-            //try
+            try
             {
                 byte[] file = File.ReadAllBytes(asm.NativeImage.FileName);
 
-                foreach (string sig in GetFileSigs())
+                foreach (SignatureEntry sig in DetectionDatabase.Signatures.Rows)
                 {
-                    long sigIndex = file.IndexOfTest(sig);
+                    long sigIndex = file.IndexOf(sig.Trigger);
                     if (sigIndex != -1)
                     {
-                        asm.AddDetection("Signature", new Reason("Signature", string.Format("Matched {0} at offset {1}", sig, sigIndex)));
+                        // Should I insert the sig Category here instead of "Signature"?
+                        asm.AddDetection("Signature", new Reason("Signature", string.Format("Matched {0} ({2}) at offset 0x{1}", sig.Trigger, sigIndex.ToString("X2"), sig.Description)));
+                        d++;
                     }
                 }
                 
             }
-            //catch (Exception ex)
-            //{
-                // File access issue
-            //    asm.AddDetection("Signature", new Reason("Signature", "Error opening file to read bytes from"));
-            //    d++;
-            //}
+            catch (Exception)
+            {
+                // File access issue?
+                asm.AddDetection("Signature", new Reason("Signature", "Error when processing signatures"));
+                d++;
+            }
 
             return d;
         }
-        private List<string> GetFileSigs()
-        {
-            List<string> fileSigs = new List<string>();
-            //fileSigs.Add("4D 5A 9? 00 03");
-            //fileSigs.Add("6E 00 31 00 2E ?4");
-            fileSigs.Add("0E 1F BA 0E ?? B4 09 CD 2? B8 01 ?C CD 21");
-            fileSigs.Add("?1 29 D6 F4 3F 14 DE AB F1 84 9B 6A E3 1B D? 02 ?? 7A AF B6 13 4E E3 83 B9");
-            /*
-            foreach (SignatureEntry sig in DetectionDatabase.Signatures.Rows)
-            {
-                fileSigs.Add(sig.Trigger);
-                
-            }*/
-
-            return fileSigs;
-
-        }
-
-
     }
 }

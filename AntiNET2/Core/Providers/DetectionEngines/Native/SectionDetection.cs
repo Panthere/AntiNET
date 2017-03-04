@@ -70,7 +70,7 @@ namespace AntiNET2.Core.Providers.DetectionEngines.Native
                         }
                         break;
                     default:
-                        asm.AddDetection("Sections", new Reason("Sections", string.Format("Section {0} is not a common section name. Could contained malicious content.", dispName)));
+                        asm.AddDetection("Sections", new Reason("Sections", string.Format("Section {0} is not a common section name. Could contain malicious content.", dispName)));
                         d++;
                         break;
                     
