@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using static AntiNET2.Core.Helpers.ByteScan;
 
 namespace AntiNET2.Core.Providers.DetectionEngines.Native
 {
@@ -28,15 +29,16 @@ namespace AntiNET2.Core.Providers.DetectionEngines.Native
             {
                 byte[] file = File.ReadAllBytes(asm.NativeImage.FileName);
 
-                foreach (SignatureEntry sig in DetectionDatabase.Signatures.Rows)
+                foreach (SigWrapper sig in CompileSigs())
                 {
-                    long sigIndex = file.IndexOf(sig.Trigger);
-                    if (sigIndex != -1)
+                    long sigIndex = sig.Signature.Scan(file);
+                    if (sigIndex == -1)
                     {
-                        // Should I insert the sig Category here instead of "Signature"?
-                        asm.AddDetection("Signature", new Reason("Signature", string.Format("Matched {0} ({2}) at offset 0x{1}", sig.Trigger, sigIndex.ToString("X2"), sig.Description)));
-                        d++;
+                        continue;
                     }
+                    // Should I insert the sig Category here instead of "Signature"?
+                    asm.AddDetection("Signature", new Reason("Signature", string.Format("Matched {0} ({2}) at offset 0x{1}", sig.Entry.Trigger, sigIndex.ToString("X2"), sig.Entry.Description)));
+                    d++;
                 }
                 
             }
@@ -48,6 +50,13 @@ namespace AntiNET2.Core.Providers.DetectionEngines.Native
             }
 
             return d;
+        }
+        private IEnumerable<SigWrapper> CompileSigs()
+        {
+            foreach (SignatureEntry sig in DetectionDatabase.Signatures.Rows)
+            {
+                yield return new SigWrapper() { Signature = CompileSig(sig.Trigger), Entry = sig };
+            }
         }
     }
 }
