@@ -61,10 +61,7 @@ namespace AntiNET2
             dp.Add(new SectionDetection());
             dp.Add(new SignatureDetection());
 
-            int totalDetections = 0;
-
-
-            dp.ForEach(x => totalDetections += x.Detect(asmSettings));
+            int totalDetections = dp.Sum(x => x.Detect(asmSettings));
 
             DetectionDatabase.Save();
 
