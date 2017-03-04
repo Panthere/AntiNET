@@ -22,6 +22,9 @@ namespace AntiNETCLI
 
             Console.Title = "AntiNET - \"False positive? Never!!1\"";
 
+            if (AntiNET2.Core.Providers.Database.DetectionDatabase.Calls == null)
+            {
+            }
             int totalDetections = 0;
             sw.Start();
             List<Detection> TotalDetections = Scanner.Scan(args[0], out totalDetections);

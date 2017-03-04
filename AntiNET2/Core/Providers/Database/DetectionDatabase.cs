@@ -123,7 +123,7 @@ namespace AntiNET2.Core.Providers.Database
                 detection.Category = parts[2].Split(new char[] { '=' }, 2)[1];
 
                 // Place to assign tags based on detection data
-                if (detection.GetType() == typeof(SignatureEntry))
+                if (detection is SignatureEntry)
                 {
                     detection.Tag = ByteScan.CompileSig(detection.Trigger);
                 }
