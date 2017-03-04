@@ -13,7 +13,7 @@ namespace AntiNET2.Core.Models
         public ModuleDefMD Module { get; set; }
         public PEImage NativeImage { get; set; }
 
-        public List<Detection> TotalDetections = new List<Detection>();
+        public List<Detection> TotalDetections { get; set; } = new List<Detection>();
 
         public void AddDetection(string type, Reason r)
         {
