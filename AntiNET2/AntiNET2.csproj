@@ -65,6 +65,7 @@
     <Compile Include="Core\Models\IDetectionEntry.cs" />
     <Compile Include="Core\Models\IDetectionProcess.cs" />
     <Compile Include="Core\Models\Reason.cs" />
+    <Compile Include="Core\Providers\Database\DatabaseInfo.cs" />
     <Compile Include="Core\Providers\Database\DetectionDatabase.cs" />
     <Compile Include="Core\Providers\DetectionEngines\Native\EOFDetection.cs" />
     <Compile Include="Core\Helpers\LevenshteinDistance.cs" />
