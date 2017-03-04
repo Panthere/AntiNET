@@ -8,8 +8,8 @@ namespace AntiNET2.Core.Models
 {
     public class Reason
     {
-        public string ReasonType;
-        public string Message;
+        public string ReasonType { get; }
+        public string Message { get; }
         public Reason(string type, string msg)
         {
             ReasonType = type;

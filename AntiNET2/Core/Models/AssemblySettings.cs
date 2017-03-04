@@ -10,8 +10,8 @@ namespace AntiNET2.Core.Models
 {
     public class AssemblySettings
     {
-        public ModuleDefMD Module;
-        public PEImage NativeImage;
+        public ModuleDefMD Module { get; set; }
+        public PEImage NativeImage { get; set; }
 
         public List<Detection> TotalDetections = new List<Detection>();
 

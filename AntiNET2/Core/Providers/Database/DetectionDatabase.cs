@@ -35,11 +35,16 @@ namespace AntiNET2.Core.Providers.Database
                 CreateData();
                 Save();
             }
-            Database = JsonConvert.DeserializeObject<DatabaseInfo>(File.ReadAllText("db.json"));
+            else
+            {
+                Database = JsonConvert.DeserializeObject<DatabaseInfo>(File.ReadAllText("db.json"));
+            }
+
+            // This has to happen no matter whether it is just created, or just loaded
+            // Multiple methods like this will more than likely be made for other things that require 'Tag' to be used.
             LoadSignatures();
         }
 
-       
         public static void Save() => File.WriteAllText("db.json", JsonConvert.SerializeObject(Database));
 
         private static void CreateData()
