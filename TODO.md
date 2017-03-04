@@ -1,0 +1,4 @@
+- Whether the detections found are a threat - 'Analysis Engine' could be a name
+- Refactor code
+- Create Database Editor
+- More Detection Engines for managed/native
