@@ -30,7 +30,7 @@ namespace AntiNET2.Core.Providers.DetectionEngines.Native
             {
                 byte[] file = File.ReadAllBytes(asm.NativeImage.FileName);
 
-                foreach (SignatureEntry sig in DetectionDatabase.Signatures.Rows)
+                foreach (SignatureEntry sig in DetectionDatabase.Signatures)
                 {
                     long sigIndex = ((Sig)sig.Tag).Scan(file);
                     if (sigIndex == -1)

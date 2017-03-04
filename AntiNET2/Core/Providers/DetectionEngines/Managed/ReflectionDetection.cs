@@ -51,7 +51,7 @@ namespace AntiNET2.Core.Providers.DetectionEngines.Managed
                     continue;
                 }
 
-                foreach (ReflectionEntry callEntry in DetectionDatabase.Calls.Rows)
+                foreach (ReflectionEntry callEntry in DetectionDatabase.Calls)
                 {
                     if (inst.ToString().ToLower().Contains(callEntry.Trigger.ToLower()))
                     {

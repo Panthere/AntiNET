@@ -1,4 +1,5 @@
 ﻿using AntiNET2.Core.Models;
+using AntiNET2.Core.Providers.Database;
 using AntiNET2.Core.Providers.DetectionEngines.Managed;
 using AntiNET2.Core.Providers.DetectionEngines.Native;
 using dnlib.DotNet;
@@ -65,7 +66,8 @@ namespace AntiNET2
 
             dp.ForEach(x => totalDetections += x.Detect(asmSettings));
 
-            
+            DetectionDatabase.Save();
+
             detectionCount = totalDetections;
 
             return asmSettings.TotalDetections;

@@ -39,7 +39,7 @@ namespace AntiNET2.Core.Providers.DetectionEngines.Managed
                 if (inst.OpCode == OpCodes.Ldstr)
                 {
                     string data = inst.Operand as string;
-                    foreach (StringEntry pEntry in DetectionDatabase.Strings.Rows)
+                    foreach (StringEntry pEntry in DetectionDatabase.Strings)
                     {
                         if (data.ToLower().Contains(pEntry.Trigger.ToLower()))
                         {

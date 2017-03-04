@@ -22,9 +22,11 @@ namespace AntiNETCLI
 
             Console.Title = "AntiNET - \"False positive? Never!!1\"";
 
+            // Trigger the db loading because it'll be counted in the time otherwise :s
             if (AntiNET2.Core.Providers.Database.DetectionDatabase.Calls == null)
             {
             }
+
             int totalDetections = 0;
             sw.Start();
             List<Detection> TotalDetections = Scanner.Scan(args[0], out totalDetections);
@@ -42,6 +44,7 @@ namespace AntiNETCLI
             }
 
             Console.WriteLine("Total time taken for scanning: {0}", sw.Elapsed.TotalSeconds);
+            
             Console.ReadKey();
         }
     }

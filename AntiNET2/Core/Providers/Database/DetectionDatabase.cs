@@ -2,6 +2,8 @@
 using AntiNET2.Core.Models;
 using AntiNET2.Core.Models.Database;
 using AntiNET2.Core.Providers.Database;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,124 +16,157 @@ namespace AntiNET2.Core.Providers.Database
 {
     public static class DetectionDatabase
     {
-        public static ReflectionTable Calls { get; private set; }
-        public static StringTable Strings { get; private set; }
-        public static PInvokeTable Natives { get; private set; }
-        public static SignatureTable Signatures { get; private set; }
+        public static List<ReflectionEntry> Calls { get; private set; }
+        public static List<StringEntry> Strings { get; private set; }
+        public static List<PInvokeEntry> Natives { get; private set; }
+        public static List<SignatureEntry> Signatures { get; private set; }
 
         private static Dictionary<string, string> Tables = new Dictionary<string, string>();
 
+        private static string BASE_PATH = @"D:\A\DB\";//Environment.CurrentDirectory + "\\";
+
         static DetectionDatabase()
         {
-            Signatures = new SignatureTable();
 
-            Tables.Add("sigs.db", "signatures");
+            Tables.Add("sigs.json", "Signatures");
+            LoadJSON();
 
-            LoadDatabase();
+            // Welcome to hell, this is stupid
+            if (Calls == null)
+                Calls = new List<ReflectionEntry>();
+            if (Strings == null)
+                Strings = new List<StringEntry>();
+            if (Natives == null)
+                Natives = new List<PInvokeEntry>();
+            if (Signatures == null)
+                Signatures = new List<SignatureEntry>();
         }
-        private static void LoadDatabase()
-        {
-            // Load database into table
-            string basePath = Environment.CurrentDirectory + "\\";
 
+        public static void Save()
+        {
+            SaveJSON();
+        }
+
+        private static void LoadJSON()
+        {
             foreach (var tbl in Tables)
             {
-                IDetectionTable tableInstance = null;
-                switch (tbl.Value)
+                if (!LoadJSONList(BASE_PATH + tbl.Key, tbl.Value))
                 {
-                    case "calls":
-                        tableInstance = Calls;
-                        break;
-                    case "strings":
-                        tableInstance = Strings;
-                        break;
-                    case "natives":
-                        tableInstance = Natives;
-                        break;
-                    case "signatures":
-                        tableInstance = Signatures;
-                        break;
-                    default:
-                        continue;
+                    Console.WriteLine("Failed to load the table {0}, using defaults", tbl.Key);
                 }
-
-                if (!LoadTable(basePath + tbl.Key, tableInstance))
-                {
-                    Console.WriteLine("Failed to load the table {0}", tbl.Key);
-                }
-                Console.WriteLine("Loaded {0} detection entries for {1}", tableInstance.Rows.Count, tbl.Key);
 
             }
         }
-        private static bool LoadTable(string fileName, IDetectionTable targetTable)
+        private static void SaveJSON()
+        {
+            foreach (var tbl in Tables)
+            {
+                if (!SaveJSONList(BASE_PATH + tbl.Key, tbl.Value))
+                {
+                    Console.WriteLine("Failed to save the table {0}!", tbl.Key);
+                }
+
+            }
+        }
+
+        private static bool LoadJSONList(string fileName, string type)
         {
             try
             {
                 string tableContents = File.ReadAllText(fileName);
-                List<IDetectionEntry> entries = new List<IDetectionEntry>();
-                // Not sure of another way to do this...
-                if (targetTable is ReflectionTable)
+                int count = 0;
+                // Calling all smart people who don't love type restricted bs in .net
+                if (type == "Calls")
                 {
-                    entries = GetEntries<ReflectionEntry>(tableContents).Cast<IDetectionEntry>().ToList();
+                    Calls = JsonConvert.DeserializeObject<List<ReflectionEntry>>(tableContents);
+                    count = Calls.Count;
                 }
-                else if (targetTable is StringTable)
+                else if (type == "Strings")
                 {
-                    entries = GetEntries<StringEntry>(tableContents).Cast<IDetectionEntry>().ToList();
+                    Strings = JsonConvert.DeserializeObject<List<StringEntry>>(tableContents);
+                    count = Strings.Count;
                 }
-                else if (targetTable is PInvokeTable)
+                else if (type == "Natives")
                 {
-                    entries = GetEntries<PInvokeEntry>(tableContents).Cast<IDetectionEntry>().ToList();
+                    Natives = JsonConvert.DeserializeObject<List<PInvokeEntry>>(tableContents);
+                    count = Natives.Count;
                 }
-                else if (targetTable is SignatureTable)
+                else if (type == "Signatures")
                 {
-                    entries = GetEntries<SignatureEntry>(tableContents).Cast<IDetectionEntry>().ToList();
+                    Signatures = JsonConvert.DeserializeObject<List<SignatureEntry>>(tableContents);
+                    LoadSignatures();
+
+                    count = Signatures.Count;
                 }
-                if (entries.Count == 0)
+                else if (type == "Test")
                 {
-                    return false;
+                    Calls = JsonConvert.DeserializeObject<List<ReflectionEntry>>(tableContents);
+                    count = Calls.Count;
                 }
 
-                targetTable.Rows = entries;
+                Console.WriteLine("Loaded {0} entries for {1}", count, type);
             }
             catch (Exception ex)
             {
                 // More than likely a problem with the file contents, or reading the file.
                 Console.WriteLine("Error while processing table {0}, {1}", Path.GetFileNameWithoutExtension(fileName), ex.Message);
-                
                 return false;
-
             }
             return true;
         }
 
-        private static List<T> GetEntries<T>(string tableContents) where T : IDetectionEntry, new()
+        private static bool SaveJSONList(string fileName, string type)
         {
-            // Need to work out a system for this, right now this is quite shocking.
-            List<T> tList = new List<T>();
-
-            string[] detections = tableContents.Split(new string[] { "||||||||" }, StringSplitOptions.RemoveEmptyEntries);
-
-            foreach (string det in detections)
+            try
             {
-                string real = det.Trim('\r', '\n');
-                string[] parts = real.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
-
-
-                T detection = new T();
-                detection.Trigger = parts[0].Split(new char[] { '=' }, 2)[1];
-                detection.Description = parts[1].Split(new char[] { '=' }, 2)[1];
-                detection.Category = parts[2].Split(new char[] { '=' }, 2)[1];
-
-                // Place to assign tags based on detection data
-                if (detection is SignatureEntry)
+                // Once again, fucking cancershits
+                object typeObj = default(object);
+                if (type == "Calls")
                 {
-                    detection.Tag = ByteScan.CompileSig(detection.Trigger);
+                    typeObj = Calls;
                 }
-                
-                tList.Add(detection);
-            }
+                else if (type == "Natives")
+                {
+                    typeObj = Natives;
+                }
+                else if (type == "Strings")
+                {
+                    typeObj = Strings;
+                }
+                else if (type == "Signatures")
+                {
+                    typeObj = Signatures;
+                }
+                string tableContents = JsonConvert.SerializeObject(typeObj);
 
-            return tList;
+                File.WriteAllText(fileName, tableContents);
+            }
+            catch (Exception ex)
+            {
+                // More than likely a problem with the file contents, or reading the file.
+                Console.WriteLine("Error while writing table {0}, {1}", Path.GetFileNameWithoutExtension(fileName), ex.Message);
+                return false;
+            }
+            return true;
+        }
+
+
+        private static void LoadSignatures()
+        {
+            for (int i = 0; i < Signatures.Count; i++)
+            {
+                if (Signatures[i].Tag == null)
+                {
+                    Signatures[i].Tag = ByteScan.CompileSig(Signatures[i].Trigger);
+                }
+                else if (Signatures[i].Tag.GetType().Name != "Sig")
+                {
+                    string contents = ((JToken)Signatures[i].Tag).ToString();
+                    ByteScan.Sig sg = JsonConvert.DeserializeObject<ByteScan.Sig>(contents);
+                    Signatures[i].Tag = sg;
+                }
+            }
         }
     }
 }

@@ -39,6 +39,10 @@
     <Reference Include="dnlib">
       <HintPath>..\Dependencies\dnlib.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -60,12 +64,7 @@
     <Compile Include="Core\Models\Detection.cs" />
     <Compile Include="Core\Models\IDetectionEntry.cs" />
     <Compile Include="Core\Models\IDetectionProcess.cs" />
-    <Compile Include="Core\Models\IDetectionTable.cs" />
     <Compile Include="Core\Models\Reason.cs" />
-    <Compile Include="Core\Providers\Database\PInvokeTable.cs" />
-    <Compile Include="Core\Providers\Database\ReflectionTable.cs" />
-    <Compile Include="Core\Providers\Database\SignatureTable.cs" />
-    <Compile Include="Core\Providers\Database\StringTable.cs" />
     <Compile Include="Core\Providers\Database\DetectionDatabase.cs" />
     <Compile Include="Core\Providers\DetectionEngines\Native\EOFDetection.cs" />
     <Compile Include="Core\Helpers\LevenshteinDistance.cs" />
@@ -80,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

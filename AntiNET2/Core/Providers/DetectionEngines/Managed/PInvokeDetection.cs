@@ -47,7 +47,7 @@ namespace AntiNET2.Core.Providers.DetectionEngines.Managed
                 return d;
             }
 
-            foreach (PInvokeEntry pEntry in DetectionDatabase.Natives.Rows)
+            foreach (PInvokeEntry pEntry in DetectionDatabase.Natives)
             {
                 if (md.ImplMap.Name.ToLower().StartsWith(pEntry.Trigger.ToLower()))
                 {
