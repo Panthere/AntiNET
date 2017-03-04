@@ -56,6 +56,7 @@ namespace AntiNET2
 
             dp.Add(new EOFDetection());
             dp.Add(new SectionDetection());
+            dp.Add(new SignatureDetection());
 
             int totalDetections = 0;
 

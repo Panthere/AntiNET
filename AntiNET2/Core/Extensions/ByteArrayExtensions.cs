@@ -14,7 +14,7 @@ namespace AntiNET2.Core.Extensions
             string singular = type;
             if (type.EndsWith("s"))
             {
-                 singular = type.Remove(type.Length - 2);
+                singular = type.Remove(type.Length - 2);
             }
             int d = 0;
             // GZip
@@ -54,6 +54,59 @@ namespace AntiNET2.Core.Extensions
                 return -1;
             }
         }
+
+        // string like
+        // 4D 5A 9? 00 03 is sig
+
+        // Hex is 2 chars, so need to work on that
+
+        public static long IndexOfTest(this byte[] search, string sig)
+        {
+            string[] sigParts = sig.Split(' ');
+            int count = search.Length - sig.Replace(" ", "").Length + 1;
+
+            for (int i = 0; i < count; i++)
+            {
+                // Problem with this is that it will not work if the first part contains ?
+                /*if (search[i].ToString("X2") != sigParts[0])
+                {
+                    continue;
+                }*/
+                int j = 0;
+                for (int a = 0; a < sigParts.Length; a++)
+                {
+                    string part = sigParts[a];
+
+                    string testMatch = search[i + a].ToString("X2");
+
+
+                    if (testMatch == part || part == "??")
+                    {
+                        j++;
+                        continue;
+                    }
+                    if (part[0] == '?')
+                    {
+                        if (testMatch[1] == part[1])
+                            j++;
+                    }
+                    else if (part[1] == '?')
+                    {
+                        if (testMatch[0] == part[0])
+                            j++;
+                    }
+                    else
+                    {
+                        // No match, break
+                        break;
+                    }
+                }
+                if (j == sigParts.Length)
+                    return i;
+            }
+            return -1;
+        }
+
         // Credits to github.com/BahNahNah
         // Slower, sadly
         public static unsafe long IndexOf(this byte[] search, string sig)
@@ -62,7 +115,7 @@ namespace AntiNET2.Core.Extensions
             fixed (byte* scrArrayPtr = &search[0])
             {
                 var scrEnum = scrArrayPtr;
-                for (var end = (scrArrayPtr + (search.Length - sig.Length + 1)); scrEnum != end; scrEnum++)
+                for (var end = (scrArrayPtr + (search.Length - sig.Length + 1)); scrEnum <= end; scrEnum++)
                 {
                     bool found = true;
                     fixed (char* mPtr = &pattern[0])
@@ -74,7 +127,9 @@ namespace AntiNET2.Core.Extensions
                             {
                                 continue;
                             }
-                            if (*(byte*)mEnum != *scrEnum)
+                            string left = (*mEnum).ToString();
+                            string right = (*scrEnum).ToString("X");
+                            if (left != right)
                             {
                                 found = false;
                                 break;
