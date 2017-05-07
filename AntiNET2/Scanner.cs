@@ -55,6 +55,9 @@ namespace AntiNET2
             if (isNet)
             {
                 dp.Add(new ResourceDetection());
+                dp.Add(new StringDetection());
+                dp.Add(new ReflectionDetection());
+                dp.Add(new PInvokeDetection());
             }
 
             dp.Add(new EOFDetection());
